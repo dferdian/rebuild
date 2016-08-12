@@ -8,12 +8,13 @@ module ActiveRecord
       @attributes = attributes
     end
 
-    def id
-      attributes[:id]
-    end
-
-    def name
-      attributes[:name]
+    def method_missing(name, *args)
+      columns = @@connection.columns("users")
+      if columns.include?(name)
+        attributes[name]
+      else
+        super
+      end
     end
 
     def self.find(id)
