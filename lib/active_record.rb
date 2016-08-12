@@ -9,7 +9,7 @@ module ActiveRecord
     end
 
     def method_missing(name, *args)
-      columns = @@connection.columns("users")
+      columns = @@connection.columns(self.class.table_name)
       if columns.include?(name)
         attributes[name]
       else
@@ -18,11 +18,15 @@ module ActiveRecord
     end
 
     def self.find(id)
-      find_by_sql("SELECT * FROM users WHERE id = #{id.to_i} LIMIT 1").first
+      find_by_sql("SELECT * FROM #{table_name} WHERE id = #{id.to_i} LIMIT 1").first
     end
 
     def self.all
-      find_by_sql("SELECT * FROM users")
+      find_by_sql("SELECT * FROM #{table_name}")
+    end
+
+    def self.table_name
+      name.downcase + "s"
     end
 
     private

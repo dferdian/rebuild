@@ -21,4 +21,8 @@ class UserTest < ActiveSupport::TestCase
     assert_kind_of User, user
     assert_equal 1, user.id
   end
+
+  def test_table_name
+    "users" == User.table_name
+  end
 end
